@@ -1,0 +1,276 @@
+/* YLOFLIX //
+// By Ylony//
+// 09/06/16//
+///////////*/
+body{
+	background-color: #0f0f0f;
+	font-family: Open Sans;
+	font-size: 24px;
+	font-weight: 400;
+}
+.logo{
+	font-weight: 800;
+	font-size: 36px;
+}
+.logo a{
+	text-decoration: none;
+	color:#cc0000;
+}
+.logo a:hover{
+	color:#ff0000;
+}
+.navi{
+	background-color: #1f1f1f;
+	width: 100%;
+}
+.navi .menu {
+	margin-left: 20px;
+	float: right;
+	text-decoration: none;
+	font-weight: 300;
+	font-size: 25px;
+	display: inline-block;
+	margin-top: 1%;
+}
+.navi .menu a{
+	font-weight: 400;
+	text-decoration: none;
+	color:#cdcdcd;
+}
+.navi .menu a:hover{
+	color:#FFFFFF;
+}
+.navi .menu input{
+	background-color: #0f0f0f;
+	border-radius: 5px;
+	border-style: none;
+	border-color: none;
+	box-shadow:1px 1px 2px #000000 inset;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+	color: #303030;
+}
+::-moz-placeholder { /* Firefox 19+ */
+	color: #303030;
+}
+:-ms-input-placeholder { /* IE 10+ */
+	color: #303030;
+}
+:-moz-placeholder { /* Firefox 18- */
+	color: #303030;
+}
+footer{
+	margin-top: 20px;
+	position: absolute;
+	left: 0;
+	bottom: -1;
+	height: 50px;
+	width: 100%;
+	overflow:hidden;
+	color:#747471;
+	font-family: Open sans;
+	font-weight: 300;
+	font-size: 13px;
+	background-color: #1c1c1c;
+}
+footer p {
+	padding-top: 15px;
+}
+.explore{
+	margin-top: 5%;
+	float: left;
+	font-weight: 700;
+}
+.explore a{
+	text-decoration: none;
+	color:#cc0000;
+}
+.explore a:hover{
+	color:#ff0000;
+}
+.content{
+	margin-top: 100px;
+}
+.cine{
+	min-height: 1000px;
+}
+.content_sep{
+	margin-top: 50px;
+}
+
+.imgShow{
+	height: 204px; 
+	width: 354px;
+	border-radius: 15px;
+}
+
+.onshow{
+	padding-left: 65px;
+	margin-top: 120px;
+	min-height: 800px;
+	background-color: rgba(40, 40, 40, 0.5);
+	border-radius: 5px;
+	border-style: none;
+	border-color: none;
+	box-shadow:5px 5px 20px #000000;
+
+}
+.onshow .title{
+	padding-top: 35px;
+	font-weight: 600;
+	font-size: 48px;
+	color:#FFFFFF;
+}
+.onshow .subtitle{
+	font-weight: 300;
+	font-size: 24px;
+	color:#FFFFFF;
+}
+table{
+	color:#FFFFFF;
+	width: 90%;
+}
+th{
+	font-weight: 600;
+}
+tr, td{
+	padding-top: 10px;
+	font-weight: 300;
+}
+.first{
+	background-color: rgba(80,  80, 80, 0.5);
+}
+.second{
+	background-color: rgba(30,  30, 30, 0.5);
+}
+
+.dashboard{
+	margin-top: 50px;
+	width: 100%;
+}
+
+.dashboard .leftPanel{
+	float: left;
+	position: fixed;
+	height: 100%;
+	width: 300px;
+	background: #080808;
+}
+
+.dashboard .leftPanel .dashTitle{
+	padding-top: 5px;
+	font-family: "Open Sans";
+	font-weight: 800;
+	font-size: 36px;
+	text-align: center;
+	background-color: #1a1a1a;
+	color:#cdcdcd;
+}
+
+.dashboard .leftPanel .dashSubTitle{
+	padding-top: 5px;
+	font-family: "Open Sans";
+	font-weight: 400;
+	font-size: 24px;
+	color:#cdcdcd;
+	margin-left: 15px;
+}
+
+.dashboard .leftPanel .dashElement{
+	padding-top: 5px;
+	font-family: "Open Sans";
+	font-weight: 400;
+	font-size: 14px;
+	color:#cdcdcd;
+	margin-left: 70px;
+}
+
+.dashboard .leftPanel .dashElement:hover{
+	color:#FFFFFF;
+}
+
+.dashboard .leftPanel .icon{
+	margin-top: 5px;
+	margin-left: 40px;
+	float: left;
+	height: 20px;
+	width: 20px;
+}
+
+.dashboard .leftPanel .dashClic{
+	text-decoration: none;
+}
+
+.dashboard .centerContent{
+	margin-left: 300px;
+	min-height: 1000px;
+}
+
+.dashboard .topContent{
+	padding-top: 13px;
+	padding-left: 15px;
+	font-family: "Open Sans";
+	font-weight: 600;
+	font-size: 24px;
+	height: 55px;
+	background-color: #1a1a1a;
+	color:#cdcdcd;
+}
+
+.dashboard .topTitle{
+	font-family: "Open Sans";
+	font-weight: 600;
+	font-size: 24px;
+	color:#cdcdcd;
+	margin-left: 25px;
+	margin-top: 40px;
+}
+
+.dashboard .centerElement{
+	margin-top: 15px;
+	font-size: 18px;
+	color:#cdcdcd;
+	margin-left: 25px;
+}
+
+.dashboard tr td{
+	width: 100%;
+}
+
+.dashboard table{
+	margin-top: 50px;
+}
+
+.dashboard input{
+	margin-right: 50px;
+	padding-left: 5px;
+	font-weight: 300;
+	width: 350px;
+	color:#1a1a1a;
+	border-radius: 5px;
+}
+
+.dashboard .btnSubmit{
+	height: 70px;
+	width: 300px;
+	background-color: #1f1f1f;
+	color:#cdcdcd;
+	font-weight: 800;
+	font-size:24px;
+	border-radius: 5px;
+	border-style: none;
+	margin-top: 50px;
+	margin-left: 33%;
+}
+
+.dashboard .btnSubmit:hover{
+	background-color: #2f2f2f;
+	color:#FFFFFF;
+}
+
+.dashboard .dashAlert{
+	margin-left: 25px;
+	width: 80%;
+}

@@ -1,0 +1,24 @@
+ylony_ylo_flix_homepage:
+    path:     /
+    defaults: { _controller: YlonyYloFlixBundle:App:index }
+ylony_ylo_flix_onShow :
+    path:     /show/{id}
+    defaults: { _controller: YlonyYloFlixBundle:App:viewShow,    id:    1 }
+    requirements:
+        id: \d+
+ylony_ylo_flix_downloadSub :
+    path:     /show/{id}/{saison}/{episode}
+    defaults: { _controller: YlonyYloFlixBundle:App:downloadSub,    id:    1 }
+    requirements:
+        id: \d+
+        saison: \d+
+        episode: \d+
+ylony_ylo_flix_dashboard :
+    path:    /dashboard/
+    defaults: { _controller: YlonyYloFlixBundle:App:dashboard }
+ylony_ylo_flix_dashboard_app-settings :
+    path:    /dashboard/app-settings
+    defaults: { _controller: YlonyYloFlixBundle:App:dashboard }
+ylony_ylo_flix_dashboard_refresh :
+    path:    /dashboard/refresh
+    defaults: { _controller: YlonyYloFlixBundle:Dashboard:refresh }

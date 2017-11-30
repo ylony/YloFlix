@@ -1,0 +1,3 @@
+ylony_ylo_flix:
+    resource: "@YlonyYloFlixBundle/Resources/config/routing.yml"
+    prefix:   /
