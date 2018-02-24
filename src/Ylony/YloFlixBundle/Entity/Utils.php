@@ -14,7 +14,24 @@ use Ylony\YloFlixBundle\Controller\AppController;
 class Utils
 {
     public static $rootDir;
+
+    public static function getSeasonFromStr($str)
+    {
+        $i = 0;
+        while($i <= 99)
+        {
+            if (strripos($str, 'S'.$i) === FALSE) {
+                $i++;
+            }
+            else{
+                return $str;
+            }
+        }
+        return FALSE;
+    }
+
     /* Old function need to be updated but still working here  */
+
     public static function getStringInfo($str)
     {
         $i = 0; //check sttripos
@@ -31,13 +48,10 @@ class Utils
                 return null;
             }
             $wait = strtoupper($cut_str[$i]);
-            if (strripos($wait, 'S0') === FALSE) {
-                if (strripos($wait, 'S1') === FALSE) {
-                    $i++;
-                } else {
-                    $cancel++;
-                }
-            } else {
+            if(self::getSeasonFromStr($wait) === FALSE){
+                $i++;
+            }
+            else{
                 $cancel++;
             }
         }
@@ -45,6 +59,7 @@ class Utils
             $end_str['showName'] = $end_str['showName'] . ' ' . $cut_str[$i2];
             $i2++;
         }
+        $end_str['showName'] = trim($end_str['showName']);
         $end_str['saison'] = substr($cut_str[$i], 1, 2);
         $end_str['episode'] = substr($cut_str[$i], 4, 2);
         return $end_str;
@@ -56,10 +71,10 @@ class Utils
         {
             $lign = explode('-', $lign);
             $lign = end($lign);
-            $lign = explode('<', $lign);
+            $lign = explode('subtitles', $lign);
             $lign = $lign[0];
         }
-        return $lign;
+        return trim($lign);
     }
 
     public static function getDownloadLink($lign)
@@ -90,6 +105,27 @@ class Utils
             return false;
     }
 
+    public static function myStrPos($str, $keyword)
+    {
+        $i = 0;
+        $j = strlen($str);
+        $x = 0;
+        while($i < $j)
+        {
+            if($str[$i] == $keyword[$x]){
+                $x++;
+            }
+            else{
+                $x = 0;
+            }
+            if($x == strlen($keyword)){
+                return true;
+            }
+            $i++;
+        }
+        return false;
+    }
+
     public static function parse($keywords, $keywords2, $temp){
         $temp_open = fopen($temp, 'ab+');
         $thisline = NULL;
@@ -98,13 +134,13 @@ class Utils
             $o = 0;
             while($lign = fgets($temp_open)){
                 if ($o === 1){
-                    if(strpos($lign, $keywords2)){
+                    if(self::myStrPos($lign, $keywords2)){
                         $thisline = $lign;
                         break;
                     }
                 }
                 else {
-                    if(strpos($lign, $keywords)){
+                    if(self::myStrPos($lign, $keywords)){
                         $o++;
                     }
                 }
@@ -114,7 +150,7 @@ class Utils
             }
             return NULL;
         }
-        //echo "Impossible d'ouvrir le fichier temporaire";
+        new Log("Can't open the temp file : " . $temp, 'fail');
         return NULL;
     }
 
@@ -145,11 +181,11 @@ class Utils
                     }
                 }
             } else {
-                //echo 'Impossible de scanner le dossier';
+                new Log("Can't scan the dir : " . $dir, 'fail');
                 return false;
             }
         } else {
-            //echo "Le dossier série lié à la configuration n'existe pas.";
+            new Log("The show folder doesn't exist : " . $dir, 'fail');
             return false;
         }
     }
@@ -168,11 +204,11 @@ class Utils
                 fclose($map);
                 unlink('./tmp/map_file.txt');
             } else {
-                //echo 'cant open map file';
+                new Log("Can't open map file", 'fail');
                 return false;
             }
         } else {
-            //echo 'map file inexistant';
+            new Log('Map file not found', 'fail');
             return false;
         }
         return $list;
@@ -196,12 +232,12 @@ class Utils
             if (!file_exists($folder . trim($str_info['showName']))) {
                 if (!empty($str_info['showName'])) {
                     if(mkdir($folder . trim($str_info['showName']))){
-                        $newShow[$j] = $str_info['showName'];
+                        $newShow[$j] = trim($str_info['showName']);
                         $j++;
                     }
                 }
                 else {
-                    //echo "Can't mkdir";
+                    new Log("Can't mkdir : " . $folder . trim($str_info['showName']), 'fail');
                 }
             }
             $nomfichier = explode('/', $list[$i]);
@@ -209,9 +245,9 @@ class Utils
             $dest = $folder . trim($name) . '/' . trim(end($nomfichier));
             $rst = rename(trim($source), trim($dest));
             if ($rst) {
-                //echo 'Moved ' . $source . ' to ' . $dest . '</br>';
+                new Log('Moved ' . $source . ' to ' . $dest . '</br>', 'ok');
             } else {
-                //echo 'Impossible de déplacer ' . $source . ' a ' . $dest;
+                new Log('Impossible de déplacer ' . $source . ' a ' . $dest, 'fail');
             }
             $i++;
         }
@@ -227,7 +263,48 @@ class Utils
         {
             return self::c_sort($list);
         }
-        //echo "Le dossier series lié à la configuration n'existe pas ou est vide.";
+        new Log("Le dossier series lié à la configuration n'existe pas ou est vide.", 'fail');
         return null;
     }
+
+    public static function getLogs(){
+        return file_get_contents(AppController::$logsFolder . 'site.html');
+    }
+
+    public static function convertItemsToPics($jsonItems){
+        $i = 0;
+        $pics = array();
+        while(!empty($jsonItems[$i])){
+            $pics[$i] = $jsonItems[$i]['link'];
+            $i++;
+        }
+        return $pics;
+    }
+
+    public static function optimiseFile($tmp)
+    {
+        $file = fopen($tmp, "a+");
+        $newPath = $tmp . ".opt";
+        $fileTmp = fopen($newPath, "a+");
+        if($file && $fileTmp){
+            while($ligne = fgets($file)){
+                if(self::myStrPos($ligne, '<meta name="description" content="')){
+                    fwrite($fileTmp, $ligne);
+                }
+                if(self::myStrPos($ligne, '<div id="container95m">')){
+                    while(self::myStrPos($ligne, '</div>') == FALSE){
+                        fwrite($fileTmp, $ligne);
+                        $ligne = fgets($file);
+                    }
+                }
+            }
+            fclose($file);
+            fclose($fileTmp);
+            return $newPath;
+        }
+        else{
+            throw new FileNotFoundException("Can't optimise the temporary file, can't open it");
+        }
+    }
+
 }

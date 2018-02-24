@@ -3,8 +3,8 @@
 namespace Ylony\YloFlixBundle\Entity;
 
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\FileNotFoundException;
 use Ylony\YloFlixBundle\Controller\AppController;
-use Ylony\YloFlixBundle\Entity\Serie;
 
 class remoteIO {
 
@@ -121,7 +121,7 @@ class remoteIO {
         $addId = explode('/', $link);
         $addId = end($addId);
         if(remoteIO::cacheGenerate('http://www.addic7ed.com/re_episode.php?ep=' . $addId . '-' . (int)$saison . 'x' . (int)$episode, $rand)){
-            $ligne1 = Utils::parse('<td width="50%"><div align="left"><span class="titulo">', '<small>', "./tmp/{$rand}.html");
+            $ligne1 = Utils::parse('<head>', 'content="', "./tmp/{$rand}.html");
             $ligne2 = Utils::parse('<td width="21%" class="language">'.$lang, '</strong>', "./tmp/{$rand}.html");
             unlink("./tmp/{$rand}.html");
             $array['title'] = trim(Utils::getTitle($ligne1));
@@ -136,26 +136,26 @@ class remoteIO {
         $rand = mt_rand(0, 99999999);
         if(remoteIO::cacheGenerate('www.addic7ed.com', $rand)){
             $ligne = Utils::parse('<option', $showName, './tmp/' . $rand . '.html');
+            if(empty($ligne))
+            {
+                new Log("Parsing return an empty result. Pattern : " . $showName . " on file : ./tmp/ " . $rand . ".html", "fail");
+                return null;
+            }
             $ligne = explode($showName, $ligne);
             $ligne = explode('<', $ligne[0]);
             $ligne = end($ligne);
             $ligne = explode('"', $ligne);
             $showid = $ligne[1];
-            $newShow = new Serie($showName, 'http://www.addic7ed.com/show/' . $showid, '');
             unlink('./tmp/' . $rand . '.html');
-            return $newShow;
+            return $showid;
         }
         return null;
     }
 
     public static function getOnlinePictures($showName){
-	    $rand = mt_rand(0, 9999999);
-	    if(self::cacheGenerate('https://www.googleapis.com/customsearch/v1?key=' . AppController::$googleApiKey . '&cx='. AppController::$googleCxKey .'&q='. $showName .'&searchType=image&fileType=jpg&imgSize=xlarge&alt=json', $rand))
-        {
-           $json = json_decode(file_get_contents('./tmp/' . $rand . '.html'), true);
-           unlink('./tmp/' . $rand . '.html');
-           return $json['items'];
-        }
+        $showName = str_replace(' ', '+', $showName);
+        $json = json_decode(file_get_contents('https://www.googleapis.com/customsearch/v1?key=' . AppController::$googleApiKey . '&cx='. AppController::$googleCxKey .'&q='. $showName .'+show&searchType=image&fileType=jpg&imgSize=xlarge&alt=json'), true);
+        return $json['items'];
     }
 
     public static function grabACookie(){
@@ -170,7 +170,7 @@ class remoteIO {
             {
                 $makeTime = filectime(realpath('./tmp/' . $tmpFolder[$i]));
                 $currentTime = time();
-                if($currentTime - $makeTime <= $cookieExpire)
+                if($currentTime - $makeTime < $cookieExpire - 10)
                 {
                     new Log('cookie found : '. './tmp/' . $tmpFolder[$i], 'ok');
                     return realpath('./tmp/' . $tmpFolder[$i]); // Grab one already logged

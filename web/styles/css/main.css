@@ -1,7 +1,9 @@
-/* YLOFLIX //
-// By Ylony//
-// 09/06/16//
-///////////*/
+/* 
+// YLOFLIX
+// By Ylony
+// Started on 09/06/16
+*/
+
 body{
 	background-color: #0f0f0f;
 	font-family: Open Sans;
@@ -273,4 +275,10 @@ tr, td{
 .dashboard .dashAlert{
 	margin-left: 25px;
 	width: 80%;
+}
+
+.dashboard .picFromWeb{
+	height: 100px;
+	width: 100px;
+	margin-left: 25px;
 }

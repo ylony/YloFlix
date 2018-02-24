@@ -22,3 +22,9 @@ ylony_ylo_flix_dashboard_app-settings :
 ylony_ylo_flix_dashboard_refresh :
     path:    /dashboard/refresh
     defaults: { _controller: YlonyYloFlixBundle:Dashboard:refresh }
+ylony_ylo_flix_dashboard_add-show :
+    path:    /dashboard/add-show
+    defaults: { _controller: YlonyYloFlixBundle:Dashboard:addShow }
+ylony_ylo_flix_dashboard_view-logs :
+    path:    /dashboard/view-logs
+    defaults: { _controller: YlonyYloFlixBundle:Dashboard:viewLogs }    

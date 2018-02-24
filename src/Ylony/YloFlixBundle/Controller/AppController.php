@@ -18,10 +18,11 @@ class AppController extends Controller
     public static $folder = "C:\Users\Desktop\Series/";
     public static $dl_folder = "C:\Users\Downloads/";
     public static $extAllowed = array('mp4', 'mkv', 'avi');
-    public static $googleApiKey = '';
-    public static $googleCxKey = '';
+    public static $googleApiKey = 'AIzaSyDLG6kSlnvpXKJFK1AWD-vpBiWu8go5Gi8';
+    public static $googleCxKey = '009968033371536939494:niwftogxje8';
     public static $debug = true;
-    public static $addicted = array('login' => 'addictedLogin', 'password' => 'addictedPassword');
+    public static $addicted = array('login' => 'addictedlogin', 'password' => 'addictedpasswd');
+    public static $logsFolder = './logs/';
     /* */
 
 
@@ -80,8 +81,8 @@ class AppController extends Controller
                 }
             }
             $episode = new Episode();
-            $episode->setEpisode($elementInfo['episode']);
-            $episode->setSaison($elementInfo['saison']);
+            $episode->setEpisode((int)$elementInfo['episode']);
+            $episode->setSaison((int)$elementInfo['saison']);
             $episode->setShowid($show->getId());
             $episode->setStr($element);
             $episode->setSublang('French'); // default
@@ -100,7 +101,7 @@ class AppController extends Controller
         set_time_limit(0); // Long task
         $path = self::$folder . $showName;
         if (!file_exists($path)) {
-            throw new FileNotFoundException($path . " Don't exist or Access is denied");
+            throw new FileNotFoundException($path . " Doesn't exist or Access is denied");
         }
         if ($list = opendir($path)) {
             while (false !== ($serie = readdir($list))) {
@@ -120,6 +121,7 @@ class AppController extends Controller
     public function viewShowAction($id, $fromDL = false)
     {
         $thisSerie = $this->getThisSerieInfo($id);
+        if($thisSerie === NULL) { throw new InvalidArgumentException("This show doesn't exist in database."); }
         $this->refreshThisShowFolder($thisSerie->getName());
         $listEpisodes = $this->getAllEpisode($id);
         return $this->render('YlonyYloFlixBundle:App:onShow.html.twig', array('episodes' => $listEpisodes, 'thisSerie' => $thisSerie, 'fromDL' => $fromDL));
@@ -130,8 +132,8 @@ class AppController extends Controller
         Utils::$rootDir = $this->get('kernel')->getRootDir() . '/../web';
         $show = $this->getThisSerieInfo($id);
         $element = $this->checkIfEpisodeExist($show, $saison, $episode);
-        $file = './tmp/' . substr($element->getStr(),0,strlen($element->getStr())-4) . '.srt';
         if($element !== null){
+            $file = './tmp/' . substr($element->getStr(),0,strlen($element->getStr())-4) . '.srt';
             $remote = new remoteIO();
             $remote->login();
             $remote->getSub('http://www.addic7ed.com' . $element->getUrl(), $file);
@@ -146,7 +148,7 @@ class AppController extends Controller
             }
             throw new InvalidArgumentException("Can't download the subtitle from the generated link");
         }
-        throw new InvalidArgumentException("This episode don't exist in database.");
+        throw new InvalidArgumentException("This episode doesn't exist in database.");
     }
 
     public function dashboardAction(){

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html xml:lang="fr" lang="fr">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -71,19 +71,12 @@
         </div>
         <div class='centerContent'>
             <div class='topContent'>
-                <p>Dashboard/General/Refresh</p>
+                <p>Dashboard/Debug/View logs</p>
             </div>
-            <form action='' method="post">
-                <p class='topTitle'>Refresh local content with database</p>
-                <div class="alert alert-danger alert-dismissable fade in dashAlert">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <p>This can takes sometimes ... Please don't interrupt the process</p>
-                </div>
-                {{ form_start(form) }}
-                <button type="submit" class="btnSubmit">Refresh</button>
-                {{ form_rest(form) }}
-                {{ form_end(form) }} 
-            </form>
+            <p class='topTitle'>View logs</p>
+            <table>
+                {{ logs | raw }}
+            </table>
         </div>
     </section>
     <footer>

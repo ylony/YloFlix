@@ -45,9 +45,8 @@ class Log
     }
     private function write($record, $time, $color, $type)
     {
-        //global $logs_folder; // From config.php recommended ./logs
-        $logs_folder = './logs/';
-        $file = 'other.html';
+        $logs_folder = AppController::$logsFolder;
+        $file = 'site.html';
         if(!file_exists($logs_folder))
         {
             $rst = mkdir($logs_folder);
@@ -55,14 +54,8 @@ class Log
                 return -1;
             }
         }
-        elseif($type === 'SQL') {
-            $file = 'sql.html';
-        }
-        else {
-            $file = 'site.html';
-        }
         $log_file = fopen($logs_folder . $file, 'ab+');
-        fwrite($log_file, $time. ' <font color=' . $color . '>' . $record . "</font></br>\n");
+        fwrite($log_file, '<tr><td>'. $time. '</td><td> <font color=' . $color . '>' . $record . "</font></td></tr>\n");
         return 0;
     }
     private function CheckServer()

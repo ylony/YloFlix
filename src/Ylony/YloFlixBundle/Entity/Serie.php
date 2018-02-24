@@ -44,12 +44,6 @@ class Serie
 
     private $listeEpisode;
 
-    public function __construct($name, $url, $pic){
-        $this->setName($name);
-        $this->setUrl($url);
-        $this->setPic($pic);
-    }
-
     /**
      * Get id
      *

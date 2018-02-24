@@ -71,19 +71,24 @@
         </div>
         <div class='centerContent'>
             <div class='topContent'>
-                <p>Dashboard/General/Refresh</p>
+                <p>Dashboard/Show/Add a show</p>
             </div>
-            <form action='' method="post">
-                <p class='topTitle'>Refresh local content with database</p>
-                <div class="alert alert-danger alert-dismissable fade in dashAlert">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <p>This can takes sometimes ... Please don't interrupt the process</p>
-                </div>
-                {{ form_start(form) }}
-                <button type="submit" class="btnSubmit">Refresh</button>
+            <p class='topTitle'>Add a show</p>
+            {{ form_start(form) }}
+            {% if pics is empty %}
+            <table> 
+                <tr><td>{{ form_label(form.name, "Name", {'label_attr': {'class': 'centerElement'}}) }}</td><td>{{ form_widget(form.name, {'attr': {'placeholder': 'The ShowName'}}) }}</td></tr>
                 {{ form_rest(form) }}
                 {{ form_end(form) }} 
-            </form>
+            </table>
+            {% else %}
+                <p class='topTitle'>Please choose a picture for this show or upload one : </p>
+                {% for key, pic in pics %}
+                    <img class='picFromWeb' src='{{ pic }}'>
+                {% endfor %}
+                {{ form_label(form.pic, "Local Picture", {'label_attr': {'class': 'centerElement'}}) }}</td><td>{{ form_widget(form.pic) }}
+            {% endif %}
+            <button type="submit" class="btnSubmit">Submit</button>    
         </div>
     </section>
     <footer>
